@@ -1,3 +1,6 @@
+import 'package:bitcoin_ticker/network_helper.dart';
+import 'package:flutter/material.dart';
+
 const List<String> currenciesList = [
   'AUD',
   'BRL',
@@ -28,4 +31,24 @@ const List<String> cryptoList = [
   'LTC',
 ];
 
-class CoinData {}
+const String coinAPIURL = 'https://rest.coinapi.io/v1/exchangerate';
+const String apiKey = '2E965885-9950-4B77-8FEA-CAE39309BACA';
+
+class CoinData {
+  final String cryptoCurrency;
+  final String normalCurrency;
+
+  CoinData({
+    @required this.cryptoCurrency,
+    @required this.normalCurrency,
+  });
+
+  Future getCoinDataRate() async {
+    String url = '$coinAPIURL/$cryptoCurrency/$normalCurrency?apikey=$apiKey';
+    print(url);
+
+    NetworkHelper networkHelper = NetworkHelper(url: url);
+    var coinData = await networkHelper.getCoinDataFromURL();
+    return coinData['rate'];
+  }
+}
